@@ -10,10 +10,10 @@ class FasttextEmbeddings(Embeddings):
     def fit_data(self):
         if self.clean:
             self.model = fasttext.train_unsupervised(
-                '../../fasttext_data.text', minn=2, maxn=5, dim=100, epoch=200, lr=0.5, thread=6)
+                '../../fasttext_data.txt', minn=2, maxn=5, dim=100, epoch=200, lr=0.5, thread=6)
         else:
             self.model = fasttext.train_unsupervised(
-                '../../fasttext_cleaned_data.text', minn=2, maxn=5, dim=100, epoch=200, lr=0.5, thread=6)
+                '../../fasttext_cleaned_data.txt', minn=2, maxn=5, dim=100, epoch=200, lr=0.5, thread=6)
 
     def get_embeddings(self, data):
         self.fit_data()
