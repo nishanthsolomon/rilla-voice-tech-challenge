@@ -5,6 +5,7 @@ from modules.preprocessing.tf_idf_preprocessing import TfIdfPreprocessing
 from modules.embeddings.tf_idf_embeddings import TfIdfEmbeddings
 from nltk.cluster import KMeansClusterer
 import nltk
+from utils.utils import visualize_model
 
 
 class TfIdfClustering():
@@ -49,6 +50,7 @@ class TfIdfClustering():
                     print(b, '->', a)
 
             print('\n\n')
+        visualize_model(self.X, self.assigned_clusters)
 
 
 if __name__ == '__main__':
