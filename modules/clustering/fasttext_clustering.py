@@ -5,7 +5,7 @@ from modules.preprocessing.fasttext_preprocessing import FasttextPreprocessing
 from modules.embeddings.fasttext_embeddings import FasttextEmbeddings
 from nltk.cluster import KMeansClusterer
 import nltk
-from utils.utils import visualize_model
+from utils.utils import visualize_model, get_silhouette_score
 
 
 class FasttextClustering():
@@ -25,14 +25,12 @@ class FasttextClustering():
             self.X = fasttext_embeddings.get_embeddings(
                 self.data['cleaned_content'])
 
-        print(self.X.sum(axis=0))
-
         self.get_clusters()
         self.set_model()
 
     def get_clusters(self):
         self.visualizer.fit(np.array(self.X))
-        # self.visualizer.show()
+        self.visualizer.show()
 
         self.NUM_CLUSTERS = self.visualizer.elbow_value_
 
@@ -49,18 +47,17 @@ class FasttextClustering():
             self.X, assign_clusters=True)
 
     def predict_model(self):
-        for j in range(self.NUM_CLUSTERS):
-            for a, b in zip(self.data.Content.to_list(), self.assigned_clusters):
-
-                if int(b) == j:
-                    print(b, '->', a)
-
-            print('\n\n')
+        silhouette_score = get_silhouette_score(self.X, self.assigned_clusters)
+        print("Average silhouette_score :", silhouette_score)
         visualize_model(self.X, self.assigned_clusters)
+
+        self.data['Topic'] = self.assigned_clusters
+        self.data.to_csv(
+            '../../data/results/fasttext_uncleaned_clustering.csv', index=False)
 
 
 if __name__ == '__main__':
-    cleaning = True
+    cleaning = False
     fasttext_clustering = FasttextClustering(cleaning)
     fasttext_clustering.fit_model()
     fasttext_clustering.predict_model()
