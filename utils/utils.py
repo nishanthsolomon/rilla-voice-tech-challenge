@@ -1,6 +1,7 @@
 from sklearn.decomposition import PCA
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.metrics import silhouette_score
 
 
 def visualize_model(X, assigned_clusters):
@@ -28,3 +29,7 @@ def visualize_model(X, assigned_clusters):
     ax.grid()
     fig.show()
     input('press return to continue')
+
+
+def get_silhouette_score(X, cluster_labels):
+    return silhouette_score(X, cluster_labels)
