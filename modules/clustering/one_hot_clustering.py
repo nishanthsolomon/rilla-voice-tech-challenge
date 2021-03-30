@@ -48,7 +48,8 @@ class OneHotClustering():
         visualize_model(self.X, self.assigned_clusters)
 
         self.data['Topic'] = self.assigned_clusters
-        self.data.to_csv('../../data/results/one_hot_clustering.csv')
+        self.data.to_csv(
+            '../../data/results/one_hot_clustering.csv', index=False)
 
 
 if __name__ == '__main__':
