@@ -5,7 +5,7 @@ from modules.preprocessing.tf_idf_preprocessing import TfIdfPreprocessing
 from modules.embeddings.one_hot_embeddings import OneHotEmbeddings
 from nltk.cluster import KMeansClusterer
 import nltk
-from utils.utils import visualize_model
+from utils.utils import visualize_model, get_silhouette_score
 
 
 class OneHotClustering():
@@ -26,7 +26,7 @@ class OneHotClustering():
 
     def get_clusters(self):
         self.visualizer.fit(np.array(self.X))
-        # self.visualizer.show()
+        self.visualizer.show()
 
         self.NUM_CLUSTERS = self.visualizer.elbow_value_
 
@@ -43,15 +43,12 @@ class OneHotClustering():
             self.X, assign_clusters=True)
 
     def predict_model(self):
-        for j in range(self.NUM_CLUSTERS):
-            for a, b in zip(self.data.Content.to_list(), self.assigned_clusters):
-
-                if int(b) == j:
-                    print(b, '->', a)
-
-            print('\n\n')
-        
+        silhouette_score = get_silhouette_score(self.X, self.assigned_clusters)
+        print("Average silhouette_score :", silhouette_score)
         visualize_model(self.X, self.assigned_clusters)
+
+        self.data['Topic'] = self.assigned_clusters
+        self.data.to_csv('../../data/results/one_hot_clustering.csv')
 
 
 if __name__ == '__main__':

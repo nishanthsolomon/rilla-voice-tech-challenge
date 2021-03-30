@@ -10,8 +10,6 @@ class OneHotEmbeddings(Embeddings):
     def fit_data(self, data):
         X = self.vectorizer.fit_transform(data)
         self.X = np.array(X.toarray())
-        for a, b in zip(self.vectorizer.get_feature_names(), self.X.sum(axis=0)):
-            print(a,'->',b)
 
     def get_embeddings(self, data):
         self.fit_data(data)
