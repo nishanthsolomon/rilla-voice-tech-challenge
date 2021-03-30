@@ -5,7 +5,7 @@ from modules.preprocessing.sent2vec_preprocessing import Sent2VecPreprocessing
 from modules.embeddings.sent2vec_embeddings import Sent2VecEmbeddings
 from nltk.cluster import KMeansClusterer
 import nltk
-from utils.utils import visualize_model
+from utils.utils import visualize_model, get_silhouette_score
 
 
 class Sent2VecClustering():
@@ -26,7 +26,7 @@ class Sent2VecClustering():
 
     def get_clusters(self):
         self.visualizer.fit(np.array(self.X))
-        # self.visualizer.show()
+        self.visualizer.show()
 
         self.NUM_CLUSTERS = self.visualizer.elbow_value_
 
@@ -43,15 +43,13 @@ class Sent2VecClustering():
             self.X, assign_clusters=True)
 
     def predict_model(self):
-        for j in range(self.NUM_CLUSTERS):
-            for a, b in zip(self.data.Content.to_list(), self.assigned_clusters):
-
-                if int(b) == j:
-                    print(b, '->', a)
-
-            print('\n\n')
-
+        silhouette_score = get_silhouette_score(self.X, self.assigned_clusters)
+        print("Average silhouette_score :", silhouette_score)
         visualize_model(self.X, self.assigned_clusters)
+
+        self.data['Topic'] = self.assigned_clusters
+        self.data.to_csv(
+            '../../data/results/sent2vec_clustering.csv', index=False)
 
 
 if __name__ == '__main__':
