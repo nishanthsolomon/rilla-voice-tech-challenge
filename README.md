@@ -72,7 +72,6 @@ Models Trained
 
         Average silhouette_score : 0.110265754
 
-    sent2vec_
     ![sent2vec_elbow.png](data/results/plots/sent2vec_elbow.png)
     ![sent2vec_cluster.png](data/results/plots/sent2vec_cluster.png)
 

@@ -21,9 +21,9 @@ class FasttextPreprocessing(Preprocessing):
         return ' '.join([token.lemma_ for token in doc if token.lemma_ not in STOP_WORDS])
 
     def save_data(self):
-        with open('../../fasttext_data.txt', 'w') as write_file:
+        with open('../../data/fasttext_data.txt', 'w') as write_file:
             write_file.write(' '.join(self.data.Content.to_list()))
-        with open('../../fasttext_cleaned_data.txt', 'w') as write_file:
+        with open('../../data/fasttext_cleaned_data.txt', 'w') as write_file:
             write_file.write(' '.join(self.data.cleaned_content.to_list()))
 
     def get_data(self):
