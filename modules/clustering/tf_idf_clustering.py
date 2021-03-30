@@ -5,12 +5,12 @@ from modules.preprocessing.tf_idf_preprocessing import TfIdfPreprocessing
 from modules.embeddings.tf_idf_embeddings import TfIdfEmbeddings
 from nltk.cluster import KMeansClusterer
 import nltk
-from utils.utils import visualize_model
+from utils.utils import visualize_model, get_silhouette_score
 
 
 class TfIdfClustering():
     def __init__(self):
-        clusters_range = (2, 40)
+        clusters_range = (2, 8)
         model = KMeans()
         self.visualizer = KElbowVisualizer(model, k=clusters_range)
 
@@ -26,12 +26,12 @@ class TfIdfClustering():
 
     def get_clusters(self):
         self.visualizer.fit(np.array(self.X))
-        # self.visualizer.show()
+        self.visualizer.show()
 
         self.NUM_CLUSTERS = self.visualizer.elbow_value_
 
-        # if self.NUM_CLUSTERS is None:
-        self.NUM_CLUSTERS = 5
+        if self.NUM_CLUSTERS is None:
+            self.NUM_CLUSTERS = 4
         print('Number of clusters: ', self.NUM_CLUSTERS)
 
     def set_model(self):
@@ -43,14 +43,13 @@ class TfIdfClustering():
             self.X, assign_clusters=True)
 
     def predict_model(self):
-        for j in range(self.NUM_CLUSTERS):
-            for a, b in zip(self.data.Content.to_list(), self.assigned_clusters):
-
-                if int(b) == j:
-                    print(b, '->', a)
-
-            print('\n\n')
+        silhouette_score = get_silhouette_score(self.X, self.assigned_clusters)
+        print("Average silhouette_score :", silhouette_score)
         visualize_model(self.X, self.assigned_clusters)
+
+        self.data['Topic'] = self.assigned_clusters
+        self.data.to_csv(
+            '../../data/results/tf_idf_clustering.csv', index=False)
 
 
 if __name__ == '__main__':

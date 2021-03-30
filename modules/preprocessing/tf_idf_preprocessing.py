@@ -20,7 +20,7 @@ class TfIdfPreprocessing(Preprocessing):
         doc = self.nlp(text.lower())
         return ' '.join([token.lemma_ for token in doc if token.lemma_ not in STOP_WORDS])
 
-    def save_data(self, path='../../tf-idf-data.csv'):
+    def save_data(self, path='../../data/tf-idf-data.csv'):
         self.data.to_csv(path, index=False)
 
     def get_data(self):
